@@ -1,0 +1,107 @@
+﻿@model IEnumerable<Custom_Computers.Models.ViewModels.Pages.PagesView>
+
+@{
+    ViewBag.Title = "Pages";
+}
+
+<h2>Pages</h2>
+
+<p>
+    @Html.ActionLink("Create New Page", "CreatePage")
+</p>
+
+@if(! Model.Any())
+{
+    <h1 class ="text-center"> There are no pages. Please add new pages</h1>
+
+}
+else
+{
+
+    <table class="table sorting" id ="pages">
+        <tr class ="home">
+            <th>
+                Title
+            </th>
+            <th>
+                Slug
+            </th>
+            <th>
+               Sidebar
+            </th>
+            <th></th>
+        </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr id ="id_@item.Id" class="@item.Slug">
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Slug)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sidebar)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditPage", new { id = item.Id }) |
+                @Html.ActionLink("Details", "PageDetails", new { id = item.Id }) |
+                @if (item.Slug != "home")
+                {
+                    @Html.ActionLink("Delete", "DeletePage", new { id = item.Id }, new  { @class = "delete" })
+                }
+               
+            </td>
+        </tr>
+    }
+
+    </table>
+
+}
+
+@section Scripts {
+    
+   
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js">
+    //this is a script used to allow the user to have a drag and drop fuctionality in the website source "https://code.jquery.com/ui/"
+   
+     </script>
+
+    <script> 
+        
+        /*
+        * this is used to pop up a message to the user for deleting a page 
+        */
+        $(function () {
+            $("a.delete").click(function () {
+                if (! confirm("Please confirm that you are deleting the page")) return false;
+            });
+            ////////////////
+
+            /*
+             * this is used to allow the user to drag and drop the pages to reorder them
+            */
+      
+            $("table#pages tbody").sortable({
+                items: "tr:not(.home)",
+                placeholder: "ui-state-highlight",
+                update: function () {
+                    var ids = $("table#pages tbody").sortable("serialize");
+                    console.log(ids);
+                    var url = "/Admin/Pages/ReorderPages";
+
+                    $.post(url, ids, function (data) {
+
+                    });
+                }
+
+            });
+
+                ////////////////
+        });
+
+    </script>
+ 
+    }
+
