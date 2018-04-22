@@ -69,9 +69,27 @@ else
      </script>
 
     <script> 
+        /*
+            * this is used to reorder categories 
+           */
+
+        $("table#pages tbody").sortable({
+            items: "tr:not(.home)",
+            placeholder: "ui-state-highlight",
+            update: function () {
+                var ids = $("table#pages tbody").sortable("serialize");
+                var url = "/Admin/Pages/ReorderPages";
+
+                $.post(url, ids, function (data) {
+
+                });
+            }
+
+        });
+        //////////
         
         /*
-        * this is used to pop up a message to the user for deleting a page 
+        * this is used to confirm deletion
         */
         $(function () {
             $("a.delete").click(function () {
@@ -79,24 +97,7 @@ else
             });
             ////////////////
 
-            /*
-             * this is used to allow the user to drag and drop the pages to reorder them
-            */
-      
-            $("table#pages tbody").sortable({
-                items: "tr:not(.home)",
-                placeholder: "ui-state-highlight",
-                update: function () {
-                    var ids = $("table#pages tbody").sortable("serialize");
-                    console.log(ids);
-                    var url = "/Admin/Pages/ReorderPages";
-
-                    $.post(url, ids, function (data) {
-
-                    });
-                }
-
-            });
+           
 
                 ////////////////
         });

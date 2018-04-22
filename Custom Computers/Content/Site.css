@@ -6,3 +6,20 @@
 
     border: 1px dashed;
 }
+
+div.new-category {
+    margin-top: 50px;
+    position: relative;
+
+}
+
+span.ajax-text {
+
+    display: none;
+}
+
+table.sorting.category td {
+
+    padding: 30px !important;
+
+}
