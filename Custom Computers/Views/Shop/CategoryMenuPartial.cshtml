@@ -1,0 +1,10 @@
+﻿@model IEnumerable<Custom_Computers.Models.ViewModels.Shop.CategoryView>
+
+<h3>Types of Products</h3>
+
+@foreach (var item in Model) {
+
+    <li><a href="/shop/category/@item.Slug.ToLower()">@item.Name</a></li>
+ 
+}
+

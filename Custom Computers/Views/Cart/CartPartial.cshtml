@@ -1,0 +1,8 @@
+﻿@model Custom_Computers.Models.ViewModels.Cart.CartView
+
+
+<div class="ajaxcart" style="color:white;">
+    Your cart: @Model.Quantity item(s) - £@Model.Price
+    <br />
+    @Html.ActionLink("Checkout", "Index")
+</div>

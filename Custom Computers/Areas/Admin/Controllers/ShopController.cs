@@ -536,6 +536,8 @@ namespace Custom_Computers.Areas.Admin.Controllers
         [HttpPost]
         public void DeleteImage(int id, string imageName)
         {
+
+            //this finds all images addreess and deletes
             string fullPath1 = Request.MapPath("~/Images/Uploads/Products/" + id.ToString() + "/Gallery/" + imageName);
             string fullPath2 = Request.MapPath("~/Images/Uploads/Products/" + id.ToString() + "/Gallery/Thumbs/" + imageName);
 
