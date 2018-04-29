@@ -23,3 +23,7 @@ table.sorting.category td {
     padding: 30px !important;
 
 }
+
+.ajaxdivtd {
+    position: absolute;
+}

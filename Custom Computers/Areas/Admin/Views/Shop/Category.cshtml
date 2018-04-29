@@ -38,7 +38,7 @@ else
 {
     <tr id="id_@item.Id">
         <td>
-         
+            <div class ="ajaxdivtd"></div>
             @Html.EditorFor(modelItem => item.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
         </td>
 
@@ -148,7 +148,8 @@ else
        
 
             /*
-       * this is used to confirm deletion
+       
+        this is used to reorder the categories
       */
 
             $("table#pages tbody").sortable({
@@ -174,17 +175,69 @@ else
 
 
         /*
-        * this is used to reorder the categories
+        ** this is used to confirm deletion
         */
         
-            $("a.delete").click(function () {
-                if (! confirm("Please confirm that you are deleting the page")) return false;
+                $("body").on("click", "a.delete", function() {
+                if (! confirm("Please confirm that you are deleting the category")) return false;
             });
             ////////////////
 
+            /*
+            * this section allows the user to rename categorys
+            */
+
+                var orginalName;
+
+                $("table#pages input.text-box").dblclick(function () {
+                    orginalName = $(this).val();
+                    $(this).attr("readonly", false);
+                });
+
+                $("table#pages input.text-box").keyup(function event() {
+                    if (event.keyCode == 13) {
+                        $(this).blur();
+                    }
+                });
+
+                $("table#pages input.text-box").blur(function () {
+                    var $this = $(this);
+                    var ajaxdiv = $this.parent().find(".ajaxdivtd");
+                    var newCategoryName = $this.val();
+                    var id = $this.parent().parent().attr("id").substring(3);
+                    var url = "/Admin/Shop/RenameCategories";
+
+                    if (newCategoryName.length < 2) {
+                        alert("Please make the category name more than two characters long");
+                        $this.attr("readonly", true);
+
+                        return false;
+
+                    }
+
+                    $.post(url, { newCategoryName: newCategoryName, id: id }, function (data) {
+                        var response = data.trim();
+
+                        if (response == "titletaken") {
+                            $this.val(orginalName);
+                            ajaxdiv.html("<span class='alert alert-danger'> The category already exist please create a different one </span>").show();
+
+                        } else {
+                            ajaxdiv.html("<span class='alert alert-success'> The category name has been changed </span>").show();
+
+                        }
+                        setTimeout(function () {
+                            ajaxdiv.fadeOut("fast", function () {
+                                ajaxdiv.html("");
+                            });
+                        }, 3000);
+                    }).done(function () {
+                        $this.attr("readonly", true);
+                    });
+                });
       
 
-                ////////////////
+            ////////////////
         });
 
     </script>
