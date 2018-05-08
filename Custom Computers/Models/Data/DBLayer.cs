@@ -12,6 +12,17 @@ namespace Custom_Computers.Models.Data
         public DbSet<SidebarDTOcs> Sidebar { get; set; }
         public DbSet<CategoryDTO> Category { get; set; }
         public DbSet<ProductDTO> Product { get; set; }
+        public DbSet<UserDTO> Users { get; set; }
+        public DbSet<RoleDTO> Roles { get; set; }
+        public DbSet<UserRoleDTO> UserRole { get; set; }
+        public DbSet<OrderDTO> Orders { get; set; }
+
+        public DbSet<OrderDetailsDTO> OrderDetails { get; set; }
+
+
+
+
+
 
 
 

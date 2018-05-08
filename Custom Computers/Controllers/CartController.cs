@@ -3,6 +3,8 @@ using Custom_Computers.Models.ViewModels.Cart;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -204,7 +206,68 @@ namespace Custom_Computers.Controllers
 
         }
 
+        public ActionResult PaypalPartial()
+        {
+            List<CartView> cart = Session["cart"] as List<CartView>;
 
+            return PartialView(cart);
+        }
+
+        [HttpPost]
+        public void PlaceOrder()
+        {
+            //this part is used to get the cart list
+            List<CartView> cart = Session["cart"] as List<CartView>;
+
+
+            //this is used to get the username
+            string username = User.Identity.Name;
+
+            int orderid = 0;
+
+
+            //this declares the order id
+            using (DBLayer db = new DBLayer())
+            {
+                //this is used to initilise the order class
+                OrderDTO orderdto = new OrderDTO();
+
+                //thsi part of the code is used to get the user id 
+                var query = db.Users.FirstOrDefault(x => x.Username == username);
+                int userId = query.Id;
+
+                //this adds to the order class and saves
+                orderdto.UserId = userId;
+                orderdto.Orderdate = DateTime.Now;
+
+                db.Orders.Add(orderdto);
+                db.SaveChanges();
+
+                //get inserted id 
+                orderid = orderdto.OrderId;
+
+                //this is used ot initlise order details class
+                OrderDetailsDTO orderdetailsdto = new OrderDetailsDTO();
+
+                //adds to order details class
+                foreach(var item in cart)
+                {
+                    orderdetailsdto.OrderId = orderid;
+                    orderdetailsdto.UserId = userId;
+                    orderdetailsdto.ProductId = item.ProductId;
+                    orderdetailsdto.Quantity = item.Quantity;
+
+                    db.OrderDetails.Add(orderdetailsdto);
+
+                    db.SaveChanges();
+
+
+                }
+
+            }
+
+
+        }
 
 
     }
